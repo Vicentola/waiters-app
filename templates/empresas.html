@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Empresas</title>
+</head>
+<body>
+    <h1>Empresas</h1>
+    <a href="/">Voltar</a>
+    <a href="/cadastro/empresa">Cadastrar novo</a>
+
+    {% for empresa in empresas %}
+    <div>
+        <h3>{{ empresa.nome }}</h3>
+        <p>Segmento: {{ empresa.segmento}}</p>
+        <p>Nota: {{empresa.nota}}</p>
+    </div>
+    {% endfor %}
+</body>
+</html>

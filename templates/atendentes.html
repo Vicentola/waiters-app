@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Atendentes</title>
+</head>
+<body>
+    <h1>Atendentes</h1>
+    <a href="/">Voltar</a>
+    <a href="/cadastro/atendente">Cadastrar novo</a>
+
+    {% for atendente in atendentes %}
+    <div>
+        <h3>{{ atendente.nome }}</h3>
+        <p>Experiência: {{ atendente.experiencia }} anos</p>
+        <p>Segmento: {{ atendente.segmento }}</p>
+        <p>Nota: {{ atendente.nota }}</p>
+    </div>
+    {% endfor %}
+</body>
+</html>
