@@ -24,11 +24,13 @@ def home():
 
     
 @app.route("/atendentes")
+@login_required
 def listar_atendentes():
     atendentes = Atendente.query.all() #query all() retorna todos os registros da tabela Atendente
     return render_template("atendentes.html", atendentes=atendentes) # retorna a lista de atendentes para o template atendentes.html
 
 @app.route("/cadastro/atendente")
+@login_required
 def cadastro_atendente():
     return render_template("cadastro_atendente.html")
 
@@ -43,11 +45,13 @@ def cadastrar_atendente():
     return redirect("/atendentes")
 
 @app.route("/empresas")
+@login_required
 def listar_empresas():
     empresas = Empresa.query.all()
     return render_template("empresas.html", empresas=empresas)
 
 @app.route("/cadastro/empresa")
+@login_required
 def cadastro_empresa():
     return render_template("cadastro_empresa.html")
 
