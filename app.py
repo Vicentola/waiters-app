@@ -1,9 +1,19 @@
 from flask import Flask, render_template, request, redirect
-from models import db, Atendente, Empresa
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from models import db, Atendente, Empresa, Usuario
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///waiters.db"
+app.config["SECRET_KEY"] = "waiters_secret_key"
 db.init_app(app)
+
+login_manager=LoginManager()
+login_manager.init_app(app) # init_app é usado para inicializar a extensão com a aplicação Flask
+login_manager.login_view="login"
+
+@login_manager.user_loader
+def load_user(user_id):
+    return Usuario.query.get(int(user_id))
 
 with app.app_context():
     db.create_all()
@@ -49,6 +59,48 @@ def cadastrar_empresa():
     db.session.add(nova)
     db.session.commit()
     return redirect("/empresas")
+
+@app.route("/registro")
+def registro():
+    return render_template("registro.html")
+
+
+@app.route("/registrar", methods=["POST"])
+def registrar():
+    email = request.form["email"]
+    senha = request.form["senha"]
+    tipo = request.form["tipo"]
+    
+    usuario = Usuario(email=email, senha=senha, tipo=tipo)
+    db.session.add(usuario)
+    db.session.commit()
+    return redirect("/login")
+
+@app.route("/login")
+def login():
+    return render_template("login.html")
+
+@app.route("/logar", methods =["POST"])
+def logar():
+    email = request.form["email"]
+    senha = request.form["senha"]
+    
+    usuario = Usuario.query.filter_by(email=email, senha=senha).first()
+    #como se fosse uma consulta sql, o first retorna o primeiro resultado ou None
+    #o if checa isso, se achou o user ou n
+    if usuario:
+        login_user(usuario)
+        return redirect("/")
+    return "Email ou senha incorretos."
+
+@app.route("/logout")
+def logout():
+    logout_user()
+    return redirect("/")
+    
+      
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)

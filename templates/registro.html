@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro</title>
+</head>
+<body>
+    <h1>Criar conta</h1>
+    <a href="/">Voltar</a>
+
+    <form method="POST" action="/registrar">
+        <label>Email:</label><br>
+        <input type="email" name="email"><br><br>
+
+        <label>Senha:</label><br>
+        <input type="password" name="senha"><br><br>
+
+        <label>Tipo de conta:</label><br>
+        <select name="tipo">
+            <option value="atendente">Atendente</option>
+            <option value="empresa">Empresa</option>
+        </select><br><br>
+
+        <button type="submit">Registrar</button>
+    </form>
+</body>
+</html>
