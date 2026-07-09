@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil</title>
+</head>
+<body>
+
+    <h1>Perfil de {{ atendente.nome }}</h1>
+    <a href="/">Voltar</a>
+    <a href="/atendente/perfil/{{ atendente.id }}">Perfil do atendente</a>
+
+    <p>Experiência: {{ atendente.experiencia }} anos</p>
+    <p>Segmento: {{ atendente.segmento }}</p>
+    <p>Nota: {{ atendente.nota }}</p>
+    <p>Disponível: {{ atendente.disponivel }}</p>
+    
+</body>
+</html>

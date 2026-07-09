@@ -13,7 +13,7 @@ login_manager.login_view="login"
 
 @login_manager.user_loader
 def load_user(user_id):
-    return Usuario.query.get(int(user_id))
+    return db.session.get(Usuario, int(user_id))
 
 with app.app_context():
     db.create_all()
@@ -42,6 +42,14 @@ def cadastrar_atendente():
     novo = Atendente(nome=nome, experiencia=experiencia, nota=0.0, segmento=segmento)
     db.session.add(novo)
     db.session.commit()
+    return redirect("/atendentes")
+
+@app.route("/atendente/perfil/<int:id>")
+@login_required
+def perfil_atendente(id):
+    atendente = db.session.get(Atendente, id)
+    if atendente:
+        return render_template("perfil_atendente.html", atendente=atendente)
     return redirect("/atendentes")
 
 @app.route("/empresas")
