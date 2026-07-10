@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from models import db, Atendente, Empresa, Usuario
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///waiters.db"
@@ -83,7 +84,8 @@ def registrar():
     senha = request.form["senha"]
     tipo = request.form["tipo"]
     
-    usuario = Usuario(email=email, senha=senha, tipo=tipo)
+    senha_hash = generate_password_hash(senha)
+    usuario = Usuario(email=email, senha=senha_hash, tipo=tipo)
     db.session.add(usuario)
     db.session.commit()
     return redirect("/login")
@@ -97,10 +99,10 @@ def logar():
     email = request.form["email"]
     senha = request.form["senha"]
     
-    usuario = Usuario.query.filter_by(email=email, senha=senha).first()
+    usuario = Usuario.query.filter_by(email=email).first()
     #como se fosse uma consulta sql, o first retorna o primeiro resultado ou None
     #o if checa isso, se achou o user ou n
-    if usuario:
+    if usuario and check_password_hash(usuario.senha, senha):
         login_user(usuario)
         return redirect("/")
     return "Email ou senha incorretos."
