@@ -96,10 +96,33 @@ def logar():
         return redirect("/")
     return "Email ou senha incorretos."
 
+@app.route("/perfil/editar")
+@login_required
+def perfil_editar():
+    return render_template("perfil_editar.html")
+
+@app.route("/perfil/salvar", methods=["POST"])
+@login_required
+def perfil_salvar():
+    segmento = request.form["segmento"]
+    experiencia = request.form["experiencia"]
+    
+    atendente = Atendente.query.filter_by(usuario_id=current_user.id).first()
+    if atendente:
+        atendente.segmento = segmento
+        atendente.experiencia = experiencia
+        db.session.commit()
+    return redirect("/atendentes")
+
+
+
 @app.route("/logout")
 def logout():
     logout_user()
     return redirect("/")
+
+
+
     
       
 
