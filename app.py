@@ -30,20 +30,6 @@ def listar_atendentes():
     atendentes = Atendente.query.all() #query all() retorna todos os registros da tabela Atendente
     return render_template("atendentes.html", atendentes=atendentes) # retorna a lista de atendentes para o template atendentes.html
 
-@app.route("/cadastro/atendente")
-@login_required
-def cadastro_atendente():
-    return render_template("cadastro_atendente.html")
-
-@app.route("/cadastrar/atendente", methods=["POST"])
-def cadastrar_atendente():
-    nome = request.form["nome"]
-    experiencia = request.form["experiencia"]
-    segmento = request.form["segmento"]
-    novo = Atendente(nome=nome, experiencia=experiencia, nota=0.0, segmento=segmento)
-    db.session.add(novo)
-    db.session.commit()
-    return redirect("/atendentes")
 
 @app.route("/atendente/perfil/<int:id>")
 @login_required
@@ -59,19 +45,6 @@ def listar_empresas():
     empresas = Empresa.query.all()
     return render_template("empresas.html", empresas=empresas)
 
-@app.route("/cadastro/empresa")
-@login_required
-def cadastro_empresa():
-    return render_template("cadastro_empresa.html")
-
-@app.route("/cadastrar/empresa", methods=["POST"])
-def cadastrar_empresa():
-    nome = request.form["nome"]
-    segmento = request.form["segmento"]
-    nova = Empresa(nome=nome, segmento=segmento, nota=0.0)
-    db.session.add(nova)
-    db.session.commit()
-    return redirect("/empresas")
 
 @app.route("/registro")
 def registro():
