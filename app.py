@@ -116,6 +116,26 @@ def perfil_salvar():
 
 
 
+@app.route("/perfil/empresa/editar")
+@login_required
+def perfil_empresa_editar():
+    return render_template("perfil_empresa_editar.html")
+
+@app.route("/perfil/empresa/salvar", methods=["POST"])
+@login_required
+def perfil_empresa_salvar():
+    segmento = request.form["segmento"]
+    
+    empresa = Empresa.query.filter_by(usuario_id=current_user.id).first()
+    if empresa:
+        empresa.segmento = segmento
+        db.session.commit()
+    return redirect("/empresas")
+
+
+
+
+
 @app.route("/logout")
 def logout():
     logout_user()
