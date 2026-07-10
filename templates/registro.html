@@ -16,12 +16,41 @@
         <input type="password" name="senha"><br><br>
 
         <label>Tipo de conta:</label><br>
-        <select name="tipo">
-            <option value="atendente">Atendente</option>
-            <option value="empresa">Empresa</option>
-        </select><br><br>
+        <input type="radio" name="tipo" value="atendente" onclick="mostrarCampos('atendente')"> Pessoa
+        <input type="radio" name="tipo" value="empresa" onclick="mostrarCampos('empresa')"> Empresa
+        <br><br>
 
+        <div id="campos-atendente" style="display:none">
+            <label>Nome:</label><br>
+            <input type="text" name="nome"><br><br>
+
+            <label>CPF:</label><br>
+            <input type="text" name="cpf"><br><br>
+        </div>
+
+
+        <div id="campos-empresa" style="display:none">
+            <label>Nome da empresa:</label><br>
+            <input type="text" name="nome_empresa"><br><br>
+
+            <label>CNPJ:</label><br>
+            <input type="text" name="cnpj"><br><br>
+
+        </div>
+   
+    
         <button type="submit">Registrar</button>
     </form>
+
+    <script>
+        function mostrarCampos(tipo) {
+            document.getElementById("campos-atendente").style.display = "none";
+            document.getElementById("campos-empresa").style.display = "none";
+            document.getElementById("campos-" + tipo).style.display = "block";
+        }
+    </script>
+
+
+
 </body>
 </html>

@@ -83,12 +83,28 @@ def registrar():
     email = request.form["email"]
     senha = request.form["senha"]
     tipo = request.form["tipo"]
-    
     senha_hash = generate_password_hash(senha)
+    
     usuario = Usuario(email=email, senha=senha_hash, tipo=tipo)
     db.session.add(usuario)
     db.session.commit()
-    return redirect("/login")
+    
+    
+    if tipo == "atendente":
+        nome = request.form["nome"]
+        cpf = request.form["cpf"]
+        novo = Atendente(usuario_id=usuario.id, nome=nome, cpf=cpf)
+        db.session.add(novo)
+        db.session.commit()
+        return redirect("/atendentes")
+    
+    else:
+        nome_empresa = request.form["nome_empresa"]
+        cnpj = request.form["cnpj"]
+        nova = Empresa(usuario_id=usuario.id, nome=nome_empresa, cnpj=cnpj)
+        db.session.add(nova)
+        db.session.commit()
+        return redirect("/empresas")
 
 @app.route("/login")
 def login():

@@ -6,11 +6,13 @@ db = SQLAlchemy()
 class Atendente(db.Model):
     
     id = db.Column(db.Integer, primary_key=True)
+    usuario_id = db.Column(db.Integer, db.ForeignKey("usuario.id"), nullable=False)
     nome = db.Column(db.String(100), nullable=False)
-    experiencia = db.Column(db.Integer, nullable=False)
+    cpf = db.Column(db.String(11), unique=True, nullable=False)
+    experiencia = db.Column(db.Integer, default=0)  # anos de experiência
     nota = db.Column(db.Float, default=0.0)
     disponivel = db.Column(db.Boolean, default=False)
-    segmento = db.Column(db.String(100), nullable=False)
+    segmento = db.Column(db.String(100))
     
     def __repr__(self): #representa um obj como string
         return f"<Atendente {self.nome}>"
@@ -18,7 +20,9 @@ class Atendente(db.Model):
 class Empresa(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(100), nullable=False)
-    segmento = db.Column(db.String(100), nullable=False)
+    usuario_id = db.Column(db.Integer, db.ForeignKey("usuario.id"), nullable=False)
+    cnpj = db.Column(db.String(14), unique=True, nullable=False)
+    segmento = db.Column(db.String(100))
     nota = db.Column(db.Float, default=0.0)
     
     def __repr__(self):
