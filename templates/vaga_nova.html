@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Nova Vaga</title>
+</head>
+<body>
+    <h1>Publicar Vaga</h1>
+    <a href="/vagas">Voltar</a>
+
+    <form method="POST" action="/vaga/criar">
+        <label>Título:</label><br>
+        <input type="text" name="titulo"><br><br>
+
+        <label>Descrição:</label><br>
+        <textarea name="descricao"></textarea><br><br>
+
+        <label>Data do evento:</label><br>
+        <input type="date" name="data_evento"><br><br>
+
+        <label>Taxa (R$):</label><br>
+        <input type="number" step="0.01" name="taxa"><br><br>
+
+        <label>Segmento:</label><br>
+        <input type="text" name="segmento"><br><br>
+
+        <button type="submit">Publicar</button>
+    </form>
+</body>
+</html>

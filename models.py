@@ -44,3 +44,16 @@ class Usuario(db.Model, UserMixin):
     """
     def __repr__(self):
         return f"<Usuario {self.email}>"
+    
+    
+class Vaga(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    titulo = db.Column(db.String(100), nullable=False)
+    descricao = db.Column(db.String(500))
+    data_evento = db.Column(db.String(20), nullable=False)
+    taxa = db.Column(db.Float, nullable=False)
+    segmento = db.Column(db.String(100))
+    empresa_id = db.Column(db.Integer, db.ForeignKey("empresa.id"), nullable=False)
+
+    def __repr__(self):
+        return f"<Vaga {self.titulo}>"

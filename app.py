@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
-from models import db, Atendente, Empresa, Usuario
+from models import db, Atendente, Empresa, Usuario, Vaga
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
@@ -131,6 +131,35 @@ def perfil_empresa_salvar():
         empresa.segmento = segmento
         db.session.commit()
     return redirect("/empresas")
+
+@app.route("/vagas")
+@login_required
+def listar_vagas():
+    vagas = Vaga.query.all()
+    return render_template("vagas.html", vagas=vagas)
+
+@app.route("/vaga/nova")
+@login_required
+def vaga_nova():
+    return render_template("vaga_nova.html")
+
+@app.route("/vaga/criar", methods=["POST"])
+@login_required
+def vaga_criar():
+    titulo = request.form["titulo"]
+    descricao = request.form["descricao"]
+    data_evento = request.form["data_evento"]
+    taxa = request.form["taxa"]
+    segmento = request.form["segmento"]
+    
+    empresa = Empresa.query.filter_by(usuario_id=current_user.id).first()
+    if empresa:
+        nova = Vaga(titulo=titulo, descricao=descricao, data_evento=data_evento, taxa=taxa, segmento=segmento, empresa_id=empresa.id)
+        db.session.add(nova)
+        db.session.commit()
+    return redirect("/vagas")
+
+from models import db, Atendente, Empresa, Usuario, Vaga
 
 
 

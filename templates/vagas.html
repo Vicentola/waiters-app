@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Vagas</title>
+</head>
+<body>
+    <h1>Vagas disponíveis</h1>
+    <a href="/">Voltar</a>
+    <a href="/vaga/nova">Publicar vaga</a>
+
+    {% for vaga in vagas %}
+    <div>
+        <h3>{{ vaga.titulo }}</h3>
+        <p>{{ vaga.descricao }}</p>
+        <p>Data: {{ vaga.data_evento }}</p>
+        <p>Taxa: R$ {{ vaga.taxa }}</p>
+        <p>Segmento: {{ vaga.segmento }}</p>
+    </div>
+    {% endfor %}
+</body>
+</html>
