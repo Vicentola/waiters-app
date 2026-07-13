@@ -3,6 +3,7 @@ from flask_login import LoginManager, login_user, logout_user, login_required, c
 from models import db, Atendente, Empresa, Usuario, Vaga
 from werkzeug.security import generate_password_hash, check_password_hash
 from models import db, Atendente, Empresa, Usuario, Vaga, Mensagem
+from models import db, Atendente, Empresa, Usuario, Vaga, Mensagem, Avaliacao
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///waiters.db"
@@ -179,7 +180,48 @@ def chat_enviar(usuario_id):
     db.session.add(mensagem)
     db.session.commit()
     return redirect(f"/chat/{usuario_id}")
+
+@app.route("/avaliar/<int:usuario_id>")
+@login_required
+def avaliar(usuario_id):
+    outro_usuario = db.session.get(Usuario, usuario_id)
+    avaliacao = Avaliacao.query.filter(
+        
+        ((Avaliacao.avaliador_id == current_user.id ) & (Avaliacao.avaliado_id == usuario_id)) |
+        ((Avaliacao.avaliador_id == usuario_id) & (Avaliacao.avaliado_id == current_user.id)) 
+        
+    ).all()
+    return render_template("avaliacao.html", outro_usuario=outro_usuario, avaliacao=avaliacao, usuario_id=usuario_id)
+
+@app.route("/avaliar/<int:usuario_id>/enviar", methods=["POST"])
+@login_required
+def enviar_avaliacao(usuario_id):
+    nota = float(request.form["nota"])
+    comentario = request.form["comentario"]
+    avaliacao = Avaliacao(avaliador_id=current_user.id, avaliado_id = usuario_id, nota=nota, comentario=comentario )
+    db.session.add(avaliacao)
+    db.session.commit()
     
+    avaliacoes = Avaliacao.query.filter_by(avaliado_id=usuario_id).all()
+    media = sum(a.nota for a in avaliacoes) / len(avaliacoes)
+    
+    # atualiza nota no perfil certo
+    atendente = Atendente.query.filter_by(usuario_id=usuario_id).first()
+    if atendente:
+        atendente.nota = media
+        db.session.commit()
+    else:
+        empresa = Empresa.query.filter_by(usuario_id=usuario_id).first()
+        if empresa:
+            empresa.nota = media
+            db.session.commit()
+    
+    
+    
+    return redirect(f"/avaliar/{usuario_id}")
+    
+    
+
 
 
 

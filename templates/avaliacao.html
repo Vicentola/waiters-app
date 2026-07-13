@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avaliação</title>
+</head>
+
+<body>
+    
+    <h1>Avaliação</h1>
+    <a href="/">Voltar</a>
+    <a href="/perfil/empresa">Perfil da empresa</a>
+
+    <form method="POST" action="/avaliar/{{ usuario_id }}/enviar">
+        <label>Nota (1-5):</label><br>
+        <input type="number" name="nota" min="1" max="5"><br><br>
+
+        <label>Comentário:</label><br>
+        <textarea name="comentario"></textarea><br><br>
+
+        <button type="submit">Enviar</button>
+    </form>
+
+
+</body>
+</html>

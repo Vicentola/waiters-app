@@ -68,3 +68,15 @@ class Mensagem(db.Model):
     
     def __repr__(self):
         return f"<Mensagem de {self.remetente_id} para {self.destinatario_id}>"
+    
+
+class Avaliacao(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    avaliador_id = db.Column(db.Integer, db.ForeignKey("usuario.id"), nullable=False)
+    avaliado_id = db.Column(db.Integer, db.ForeignKey("usuario.id"), nullable=False)
+    nota = db.Column(db.Float, nullable=False)
+    comentario = db.Column(db.String(500))
+    data = db.Column(db.DateTime, default=db.func.now())
+
+    def __repr__(self):
+        return f"<Avaliacao {self.avaliador_id} -> {self.avaliado_id}>"
