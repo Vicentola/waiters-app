@@ -57,3 +57,14 @@ class Vaga(db.Model):
 
     def __repr__(self):
         return f"<Vaga {self.titulo}>"
+    
+    
+class Mensagem(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    remetente_id = db.Column(db.Integer, db.ForeignKey("usuario.id"), nullable=False)
+    destinatario_id=db.Column(db.Integer,db.ForeignKey("usuario.id"), nullable=False)
+    conteudo = db.Column(db.String(1000), nullable=False)
+    data_envio = db.Column(db.DateTime, default=db.func.now())
+    
+    def __repr__(self):
+        return f"<Mensagem de {self.remetente_id} para {self.destinatario_id}>"

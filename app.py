@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from models import db, Atendente, Empresa, Usuario, Vaga
 from werkzeug.security import generate_password_hash, check_password_hash
+from models import db, Atendente, Empresa, Usuario, Vaga, Mensagem
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///waiters.db"
@@ -31,7 +32,7 @@ def listar_atendentes():
     return render_template("atendentes.html", atendentes=atendentes) # retorna a lista de atendentes para o template atendentes.html
 
 
-@app.route("/atendente/perfil/<int:id>")
+@app.route("/atendente/perfil/<int:id>") #URL dinamica, o <int:id> indica que a rota espera um inteiro como parâmetro, que será passado para a função perfil_atendente
 @login_required
 def perfil_atendente(id):
     atendente = db.session.get(Atendente, id)
@@ -159,7 +160,26 @@ def vaga_criar():
         db.session.commit()
     return redirect("/vagas")
 
-from models import db, Atendente, Empresa, Usuario, Vaga
+@app.route("/chat/<int:usuario_id>")
+@login_required
+def chat(usuario_id):
+    outro_usuario = db.session.get(Usuario, usuario_id)
+    mensagens = Mensagem.query.filter(
+        
+        ((Mensagem.remetente_id == current_user.id) & (Mensagem.destinatario_id == usuario_id)) |
+        ((Mensagem.remetente_id == usuario_id) & (Mensagem.destinatario_id == current_user.id))  
+    ).all()
+    return render_template("chat.html", outro_usuario=outro_usuario, mensagens=mensagens)
+
+@app.route("/chat/<int:usuario_id>/enviar", methods=["POST"])
+@login_required
+def chat_enviar(usuario_id):
+    conteudo = request.form["conteudo"]
+    mensagem = Mensagem(remetente_id=current_user.id, destinatario_id=usuario_id, conteudo=conteudo)
+    db.session.add(mensagem)
+    db.session.commit()
+    return redirect(f"/chat/{usuario_id}")
+    
 
 
 

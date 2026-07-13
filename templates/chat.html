@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+</head>
+<body>
+
+    <h1>Chat com {{outro_usuario.email}}</h1>
+    <a href="/">Voltar</a>
+
+    <div id="mensagens">
+
+        {% for mensagem in mensagens %}
+            {% if mensagem.remetente_id == current_user.id %}
+                <p><strong>Você:</strong>{{mensagem.conteudo}}</p>
+                {% else %}
+                <p><strong>{{outro_usuario.email}}:</strong>{{mensagem.conteudo}}</p>
+            {% endif %}
+        {% endfor %}
+
+
+    </div>
+
+    <form method="POST" action="/chat/{{outro_usuario.id}}/enviar">
+        <input type="text" name="conteudo" placeholder="Digite sua mensagem"><br><br>
+        <button type="submit">Enviar</button>
+    </form>
+    
+</body>
+</html>
