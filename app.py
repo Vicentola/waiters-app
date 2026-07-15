@@ -208,12 +208,12 @@ def enviar_avaliacao(usuario_id):
     # atualiza nota no perfil certo
     atendente = Atendente.query.filter_by(usuario_id=usuario_id).first()
     if atendente:
-        atendente.nota = media
+        atendente.nota = round(media, 2)
         db.session.commit()
     else:
         empresa = Empresa.query.filter_by(usuario_id=usuario_id).first()
         if empresa:
-            empresa.nota = media
+            empresa.nota = round(media, 2)
             db.session.commit()
     
     
